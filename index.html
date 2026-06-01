@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>妞妞的放学后时间计划</title>
+    <style>
+      :root {
+        --bg: #f5f5f7;
+        --paper: rgba(255, 255, 255, 0.86);
+        --ink: #1d1d1f;
+        --muted: #6e6e73;
+        --line: rgba(60, 60, 67, 0.12);
+        --blue: #007aff;
+        --green: #34c759;
+        --yellow: #ffcc00;
+        --pink: #ff375f;
+        --purple: #5856d6;
+        --orange: #ff9500;
+        --shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, #ffffff 0%, #f5f5f7 52%, #eef2f7 100%);
+        color: var(--ink);
+        font-family:
+          ui-rounded, "SF Pro Rounded", "Nunito", "PingFang SC", system-ui, -apple-system,
+          BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .phone {
+        width: min(420px, calc(100vw - 20px));
+        height: min(880px, calc(100vh - 20px));
+        min-height: 720px;
+        overflow: hidden;
+        border: 10px solid #111113;
+        border-radius: 42px;
+        background:
+          radial-gradient(circle at 18% 6%, rgba(0, 122, 255, 0.08), transparent 22%),
+          radial-gradient(circle at 86% 18%, rgba(255, 204, 0, 0.12), transparent 20%),
+          var(--bg);
+        box-shadow: var(--shadow);
+      }
+
+      .app {
+        height: 100%;
+        overflow-y: auto;
+        padding: 22px 18px 98px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        font-size: 29px;
+        line-height: 1.05;
+        letter-spacing: 0;
+        font-weight: 800;
+      }
+
+      h2 {
+        font-size: 20px;
+        font-weight: 760;
+      }
+
+      h3 {
+        font-size: 15px;
+        font-weight: 730;
+      }
+
+      .muted {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+
+      .eyebrow {
+        margin-bottom: 5px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 650;
+      }
+
+      .badge {
+        width: 54px;
+        height: 54px;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(255, 204, 0, 0.22);
+        border-radius: 17px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.18)),
+          rgba(255, 204, 0, 0.2);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.45);
+        color: var(--orange);
+        font-size: 24px;
+        font-weight: 800;
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: var(--paper);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.045);
+        backdrop-filter: blur(18px);
+      }
+
+      .hero {
+        position: relative;
+        overflow: hidden;
+        padding: 16px;
+        margin-bottom: 14px;
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(241, 248, 255, 0.9)),
+          var(--paper);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 116px 1fr;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .planet {
+        width: 112px;
+        height: 112px;
+        display: grid;
+        place-items: center;
+        border-radius: 34px;
+        background:
+          linear-gradient(145deg, rgba(0, 122, 255, 0.92), rgba(88, 86, 214, 0.88));
+        color: #fff;
+        text-align: center;
+        box-shadow: 0 14px 28px rgba(0, 122, 255, 0.16);
+      }
+
+      .planet strong {
+        display: block;
+        font-size: 30px;
+        line-height: 1;
+      }
+
+      .planet span {
+        font-size: 12px;
+        font-weight: 760;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 10px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(0, 122, 255, 0.1);
+        color: var(--blue);
+        font-size: 12px;
+        font-weight: 720;
+      }
+
+      .controls {
+        display: grid;
+        grid-template-columns: 40px 1fr 40px;
+        gap: 8px;
+        align-items: center;
+        margin: 12px 0;
+      }
+
+      .icon-btn {
+        height: 40px;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.84);
+        color: var(--blue);
+        cursor: pointer;
+        font-size: 22px;
+        font-weight: 760;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+      }
+
+      .day-select {
+        height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--paper);
+        color: var(--ink);
+        text-align: center;
+        font-weight: 720;
+      }
+
+      .progress-card {
+        padding: 14px;
+        margin-bottom: 14px;
+      }
+
+      .progress-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 9px;
+        font-size: 13px;
+        font-weight: 720;
+      }
+
+      .bar {
+        height: 12px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(60, 60, 67, 0.1);
+      }
+
+      .bar span {
+        display: block;
+        width: var(--w);
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--green), var(--blue));
+      }
+
+      .section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 18px 0 10px;
+      }
+
+      .timeline {
+        display: grid;
+        gap: 10px;
+      }
+
+      .task {
+        display: grid;
+        grid-template-columns: 62px 1fr 34px;
+        gap: 10px;
+        align-items: center;
+        padding: 12px;
+      }
+
+      .time {
+        color: var(--blue);
+        font-size: 13px;
+        font-weight: 760;
+      }
+
+      .task-title {
+        font-size: 15px;
+        font-weight: 760;
+      }
+
+      .task-check {
+        width: 34px;
+        height: 34px;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(52, 199, 89, 0.12);
+        color: var(--green);
+        cursor: pointer;
+        font-weight: 800;
+      }
+
+      .task.done {
+        border-color: rgba(53, 196, 111, 0.28);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(235, 255, 241, 0.88));
+      }
+
+      .task.done .task-check {
+        background: var(--green);
+        color: #fff;
+      }
+
+      .reward-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .reward {
+        min-height: 94px;
+        padding: 14px;
+      }
+
+      .reward strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--blue);
+        font-size: 24px;
+      }
+
+      .note {
+        padding: 14px;
+        margin-top: 12px;
+      }
+
+      .note textarea {
+        width: 100%;
+        min-height: 78px;
+        margin-top: 8px;
+        resize: none;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.86);
+        color: var(--ink);
+        outline: 0;
+      }
+
+      .toast {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        left: 24px;
+        display: none;
+        min-height: 48px;
+        padding: 13px 15px;
+        border-radius: 18px;
+        background: rgba(29, 29, 31, 0.88);
+        color: #fff;
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22);
+        font-weight: 720;
+        backdrop-filter: blur(18px);
+      }
+
+      .toast.show {
+        display: block;
+        animation: pop 1.5s ease forwards;
+      }
+
+      @keyframes pop {
+        0% {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        14%,
+        82% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="phone">
+      <div class="app">
+        <header class="topbar">
+          <div>
+            <div class="eyebrow">妞妞 · 放学后 16:30-22:00</div>
+            <h1>妞妞的计划小宇宙</h1>
+          </div>
+          <div class="badge">星</div>
+        </header>
+
+        <section class="hero card">
+          <div class="hero-grid">
+            <div class="planet"><div><strong id="dayNumber">01</strong><span>第几天</span></div></div>
+            <div>
+              <h2 id="themeTitle">星星作业站</h2>
+              <p class="muted" id="themeText">妞妞今天把作业拆成小关卡，完成一个就点亮一颗星。</p>
+              <div class="chips">
+                <span class="chip" id="energyChip">0 星星</span>
+                <span class="chip" id="moodChip">开心模式</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="controls">
+          <button class="icon-btn" id="prevDay">‹</button>
+          <select class="day-select" id="daySelect"></select>
+          <button class="icon-btn" id="nextDay">›</button>
+        </div>
+
+        <section class="progress-card card">
+          <div class="progress-top"><span>今日完成度</span><span id="progressText">0%</span></div>
+          <div class="bar"><span id="progressBar" style="--w: 0%"></span></div>
+          <p class="muted" style="margin-top: 9px" id="coachText">先完成第一关，不用一下子做到完美。</p>
+        </section>
+
+        <div class="section-head"><h2>妞妞今日计划</h2><span class="chip">不重复 30 天</span></div>
+        <section class="timeline" id="timeline"></section>
+
+        <div class="section-head"><h2>完成奖励</h2><span class="chip">给妞妞反馈</span></div>
+        <section class="reward-grid">
+          <div class="reward card"><strong id="starReward">+0</strong><h3>星星积分</h3><p class="muted">完成任务就会增加，今天满分 60。</p></div>
+          <div class="reward card"><strong id="playReward">0 分钟</strong><h3>明日自由券</h3><p class="muted">完成度越高，第二天可兑换更多自由玩耍时间。</p></div>
+        </section>
+
+        <section class="note card">
+          <h2>妞妞今天的小纸条</h2>
+          <p class="muted">可以写一句妞妞今天最想表扬自己的地方。</p>
+          <textarea id="note" placeholder="例如：妞妞今天作业没有拖很久。"></textarea>
+        </section>
+      </div>
+      <div class="toast" id="toast">完成啦</div>
+    </main>
+
+    <script>
+      const storeKey = "kids-after-school-planner-v1";
+      const themes = [
+        ["星星作业站", "妞妞把作业拆成小关卡，完成一个就点亮一颗星。"],
+        ["彩虹整理局", "先整理书包，再开始学习，脑袋会更轻松。"],
+        ["时间飞船", "每一段时间都是一个小舱室，按顺序飞过去。"],
+        ["魔法铅笔日", "今天重点是写字认真，速度不用抢第一。"],
+        ["勇气问号日", "不会的题先圈起来，最后再集中解决。"],
+        ["专注小火箭", "25 分钟不离座，就是一次漂亮发射。"],
+        ["笑脸复盘日", "今天做完后选一个最满意的小瞬间。"],
+        ["橙色能量站", "先补水、再学习，身体也要一起合作。"],
+        ["蓝色安静岛", "今天把声音调小，让脑袋更容易思考。"],
+        ["紫色挑战夜", "挑一道难题当挑战，做不出也可以请教。"],
+      ];
+      const studyNames = ["语文阅读", "数学口算", "英语跟读", "科学观察", "古诗背诵", "错题复盘"];
+      const homeworkNames = ["先做简单题", "先做书写题", "先做数学题", "先做语文题", "先做订正题", "按老师清单完成"];
+      const playNames = ["自由搭建", "画画时间", "跳绳挑战", "音乐放松", "桌面小游戏", "创意手工"];
+      const debateNames = ["和妈妈吵架时间", "妈妈辩论 3 分钟", "说出不开心 3 分钟", "家庭小会议", "情绪吐槽时间", "我来讲道理"];
+      const washNames = ["泡泡洗漱", "牙齿亮晶晶", "睡前整理", "安静洗漱", "睡衣换装", "明日书包检查"];
+      const state = { day: 0, done: {}, notes: {}, ...load() };
+
+      const daySelect = document.getElementById("daySelect");
+      for (let i = 0; i < 30; i += 1) {
+        const option = document.createElement("option");
+        option.value = i;
+        option.textContent = `第 ${i + 1} 天`;
+        daySelect.appendChild(option);
+      }
+
+      function load() {
+        try {
+          return JSON.parse(localStorage.getItem(storeKey)) || {};
+        } catch {
+          return {};
+        }
+      }
+
+      function save() {
+        localStorage.setItem(storeKey, JSON.stringify(state));
+      }
+
+      function planFor(day) {
+        const theme = themes[day % themes.length];
+        const offset = day % 6;
+        const debate = debateNames[offset];
+        return {
+          theme,
+          tasks: [
+            ["16:30", "16:45", "回家缓冲", "喝水、换衣服、把书包放好，先让脑袋降落。"],
+            ["16:45", "17:15", studyNames[(day + 1) % studyNames.length], `今天学习主题：${studyNames[(day + 1) % studyNames.length]}，只做一个小目标。`],
+            ["17:15", "18:05", homeworkNames[(day + 2) % homeworkNames.length], `作业关卡 1：${homeworkNames[(day + 2) % homeworkNames.length]}。`],
+            ["18:05", "18:30", playNames[(day + 3) % playNames.length], "认真玩，不偷看作业，也不拖太久。"],
+            ["18:30", "19:05", "晚饭和聊天", "说一件学校里好玩的事。"],
+            ["19:05", "19:50", "作业收尾", "把剩下的作业完成，最后检查名字和日期。"],
+            ["19:50", "20:00", debate, debate.includes("吵架") ? "只能 10 分钟，规则：不骂人、不摔东西、说完要抱一下。" : "把不开心说出来，大人只听不打断。"],
+            ["20:00", "20:30", playNames[(day + 4) % playNames.length], "第二段玩耍，完成作业后玩起来更踏实。"],
+            ["20:30", "21:00", "阅读或亲子时间", "读 15 分钟，再聊 5 分钟今天的收获。"],
+            ["21:00", "21:30", washNames[(day + 5) % washNames.length], "洗脸、刷牙、整理明天用品。"],
+            ["21:30", "22:00", "睡前安静区", "灯光变暗，听故事或自己翻书，准备睡觉。"],
+          ],
+        };
+      }
+
+      function render() {
+        const plan = planFor(state.day);
+        document.getElementById("dayNumber").textContent = String(state.day + 1).padStart(2, "0");
+        document.getElementById("themeTitle").textContent = plan.theme[0];
+        document.getElementById("themeText").textContent = plan.theme[1];
+        daySelect.value = state.day;
+        document.getElementById("note").value = state.notes[state.day] || "";
+        document.getElementById("timeline").innerHTML = plan.tasks
+          .map((task, index) => {
+            const key = `${state.day}-${index}`;
+            const done = Boolean(state.done[key]);
+            return `<article class="task card ${done ? "done" : ""}" data-index="${index}">
+              <div class="time">${task[0]}<br>${task[1]}</div>
+              <div><div class="task-title">${task[2]}</div><div class="muted">${task[3]}</div></div>
+              <button class="task-check">${done ? "✓" : "+"}</button>
+            </article>`;
+          })
+          .join("");
+        document.querySelectorAll(".task").forEach((card) => {
+          card.addEventListener("click", () => {
+            const key = `${state.day}-${card.dataset.index}`;
+            state.done[key] = !state.done[key];
+            save();
+            render();
+            toast(state.done[key] ? "完成一个小关卡，星星 +5" : "已取消这个小关卡");
+          });
+        });
+        updateProgress();
+      }
+
+      function updateProgress() {
+        const total = planFor(state.day).tasks.length;
+        const done = Array.from({ length: total }, (_, index) => Boolean(state.done[`${state.day}-${index}`])).filter(Boolean).length;
+        const percent = Math.round((done / total) * 100);
+        document.getElementById("progressText").textContent = `${percent}%`;
+        document.getElementById("progressBar").style.setProperty("--w", `${percent}%`);
+        document.getElementById("energyChip").textContent = `${done * 5} 星星`;
+        document.getElementById("starReward").textContent = `+${done * 5}`;
+        document.getElementById("playReward").textContent = `${Math.floor(percent / 10) * 2} 分钟`;
+        document.getElementById("coachText").textContent =
+          percent >= 90 ? "妞妞今天很完整，可以收工啦。" : percent >= 60 ? "妞妞已经过半，后面只要稳住节奏。" : "妞妞先完成第一关，不用一下子做到完美。";
+      }
+
+      function changeDay(next) {
+        state.day = (next + 30) % 30;
+        save();
+        render();
+      }
+
+      function toast(text) {
+        const box = document.getElementById("toast");
+        box.textContent = text;
+        box.classList.remove("show");
+        void box.offsetWidth;
+        box.classList.add("show");
+      }
+
+      document.getElementById("prevDay").addEventListener("click", () => changeDay(state.day - 1));
+      document.getElementById("nextDay").addEventListener("click", () => changeDay(state.day + 1));
+      daySelect.addEventListener("change", (event) => changeDay(Number(event.target.value)));
+      document.getElementById("note").addEventListener("input", (event) => {
+        state.notes[state.day] = event.target.value;
+        save();
+      });
+
+      render();
+    </script>
+  </body>
+</html>
